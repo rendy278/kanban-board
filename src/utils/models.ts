@@ -3,7 +3,12 @@ import { ColumnType } from "./enums";
 export interface TaskModel {
   id: string;
   title: string;
-  description: string;
-  status: ColumnType;
+  column: ColumnType;
   color: string;
+}
+
+export interface DragItem {
+  index: number;
+  id: TaskModel["id"];
+  from: ColumnType;
 }

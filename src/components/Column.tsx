@@ -2,6 +2,7 @@ import { Badge, Box, Heading, IconButton, Stack } from "@chakra-ui/react";
 import { LuPlus } from "react-icons/lu";
 import type { TaskModel } from "../utils/models";
 import Task from "./Task";
+import useColumnTasks from "../hooks/useColumnTask";
 
 enum ColumnType {
   TO_DO = "Todo",
@@ -10,11 +11,6 @@ enum ColumnType {
   COMPLETED = "Completed",
 }
 
-enum ItemType {
-  TASK = "Task",
-}
-
-// Gunakan hanya nama warna Chakra, bukan dengan `.100`
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: "blue",
   "In Progress": "yellow",
@@ -22,40 +18,10 @@ const ColumnColorScheme: Record<ColumnType, string> = {
   Completed: "green",
 };
 
-// Contoh dummy task
-const mockTasks: TaskModel[] = [
-  {
-    id: "1",
-    title: "Task 1",
-    description: "Description for Task 1",
-    status: ColumnType.TO_DO,
-    color: "red.200",
-  },
-  {
-    id: "2",
-    title: "Task 2",
-    description: "Description for Task 2",
-    status: ColumnType.IN_PROGRESS,
-    color: "yellow.200",
-  },
-  {
-    id: "3",
-    title: "Task 3",
-    description: "Description for Task 3",
-    status: ColumnType.BLOCKED,
-    color: "blue.200",
-  },
-  {
-    id: "4",
-    title: "Task 4",
-    description: "Description for Task 4",
-    status: ColumnType.COMPLETED,
-    color: "green.200",
-  },
-];
-
 const Column = ({ column }: { column: ColumnType }) => {
-  const columnTasks = mockTasks.map((task, index) => (
+  const { tasks, addEmptyTask } = useColumnTasks(column);
+
+  const columnTasks = tasks.map((task, index) => (
     <Task key={task.id} index={index} task={task} />
   ));
 
@@ -76,10 +42,11 @@ const Column = ({ column }: { column: ColumnType }) => {
         colorScheme="light"
         aria-label="add-task"
         children={<LuPlus />}
+        onClick={addEmptyTask}
       />
 
       <Stack
-        direction={{ base: "column" }}
+        direction={{ base: "row", md: "column" }}
         mt={4}
         gap={4}
         rounded="lg"

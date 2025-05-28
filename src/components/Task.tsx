@@ -1,4 +1,5 @@
 import { Box, IconButton, Textarea } from "@chakra-ui/react";
+import { ScaleFade } from "@chakra-ui/transition";
 import type { TaskModel } from "../utils/models";
 import { LuDelete } from "react-icons/lu";
 
@@ -9,40 +10,50 @@ type TaskProps = {
 
 const Task = ({ index, task }: TaskProps) => {
   return (
-    <Box
-      as="div"
-      role="group"
-      position="relative"
-      rounded="lg"
-      w="200"
-      pl="3"
-      pr="7"
-      pt="3"
-      cursor="grab"
-      bgColor={task.color}
-    >
-      <IconButton
-        position="absolute"
-        top={0}
-        right={0}
-        z-index={100}
-        aria-label="Delete Task"
-        children={<LuDelete />}
-        opacity={0}
-        _groupHover={{ opacity: 1 }}
-      />
-      <Textarea
-        value={task.title}
-        fontSize="lg"
-        cursor="inherit"
-        p={0}
-        fontWeight="semibold"
-        resize="none"
-        border="none"
-        color="gray.800"
-        _focus={{ outline: "none" }}
-      />
-    </Box>
+    <ScaleFade in={true} unmountOnExit>
+      <Box
+        as="div"
+        position="relative"
+        rounded="lg"
+        pl={3}
+        pr={7}
+        pt={3}
+        pb={1}
+        boxShadow="xl"
+        cursor="grab"
+        fontWeight="bold"
+        userSelect="none"
+        bgColor={task.color}
+        _hover={{
+          "& .delete-btn": { opacity: 1 },
+        }}
+      >
+        <IconButton
+          position="absolute"
+          top={0}
+          right={0}
+          bg="transparent"
+          zIndex={100}
+          aria-label="delete-task"
+          colorScheme="solid"
+          children={<LuDelete />}
+          opacity={0}
+          className="delete-btn"
+          color="gray.600"
+        />
+        <Textarea
+          value={task.title}
+          fontSize="lg"
+          cursor="inherit"
+          p={0}
+          fontWeight="semibold"
+          resize="none"
+          border="none"
+          color="gray.800"
+          _focus={{ outline: "none" }}
+        />
+      </Box>
+    </ScaleFade>
   );
 };
 
