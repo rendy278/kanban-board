@@ -3,13 +3,7 @@ import { LuPlus } from "react-icons/lu";
 import type { TaskModel } from "../utils/models";
 import Task from "./Task";
 import useColumnTasks from "../hooks/useColumnTask";
-
-enum ColumnType {
-  TO_DO = "Todo",
-  IN_PROGRESS = "In Progress",
-  BLOCKED = "Blocked",
-  COMPLETED = "Completed",
-}
+import { ColumnType } from "../utils/enums";
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: "blue",
@@ -19,10 +13,17 @@ const ColumnColorScheme: Record<ColumnType, string> = {
 };
 
 const Column = ({ column }: { column: ColumnType }) => {
-  const { tasks, addEmptyTask } = useColumnTasks(column);
+  const { tasks, addEmptyTask, deleteTask, updateTask } =
+    useColumnTasks(column);
 
   const columnTasks = tasks.map((task, index) => (
-    <Task key={task.id} index={index} task={task} />
+    <Task
+      key={task.id}
+      index={index}
+      task={task}
+      onUpdate={updateTask}
+      onDelete={deleteTask}
+    />
   ));
 
   return (

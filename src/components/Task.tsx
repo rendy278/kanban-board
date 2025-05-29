@@ -6,9 +6,23 @@ import { LuDelete } from "react-icons/lu";
 type TaskProps = {
   index: number;
   task: TaskModel;
+  onUpdate: (id: TaskModel["id"], updatedTask: TaskModel) => void;
+  onDelete: (id: TaskModel["id"]) => void;
 };
 
-const Task = ({ index, task }: TaskProps) => {
+const Task = ({
+  index,
+  task,
+  onUpdate: handleUpdate,
+  onDelete: handleDelete,
+}: TaskProps) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newTitle = e.target.value;
+    handleUpdate(task.id, { ...task, title: newTitle });
+  };
+  const handleDeleteClick = () => {
+    handleDelete(task.id);
+  };
   return (
     <ScaleFade in={true} unmountOnExit>
       <Box
@@ -39,6 +53,7 @@ const Task = ({ index, task }: TaskProps) => {
           children={<LuDelete />}
           opacity={0}
           className="delete-btn"
+          onClick={handleDeleteClick}
           color="gray.600"
         />
         <Textarea
@@ -50,6 +65,7 @@ const Task = ({ index, task }: TaskProps) => {
           resize="none"
           border="none"
           color="gray.800"
+          onChange={handleTitleChange}
           _focus={{ outline: "none" }}
         />
       </Box>
