@@ -1,6 +1,5 @@
 import { Badge, Box, Heading, IconButton, Stack } from "@chakra-ui/react";
 import { LuPlus } from "react-icons/lu";
-import type { TaskModel } from "../utils/models";
 import Task from "./Task";
 import useColumnTasks from "../hooks/useColumnTask";
 import { ColumnType } from "../utils/enums";

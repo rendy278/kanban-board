@@ -1,7 +1,10 @@
-import { Box, IconButton, Textarea } from "@chakra-ui/react";
+import { Box, IconButton } from "@chakra-ui/react";
 import { ScaleFade } from "@chakra-ui/transition";
 import type { TaskModel } from "../utils/models";
 import { LuDelete } from "react-icons/lu";
+import AutoResizeTextarea from "./AutoResizeTextArea";
+import { useRef } from "react";
+import { useAutoSizeTextArea } from "../hooks/useAutoResizeTextArea";
 
 type TaskProps = {
   index: number;
@@ -23,6 +26,8 @@ const Task = ({
   const handleDeleteClick = () => {
     handleDelete(task.id);
   };
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useAutoSizeTextArea(textAreaRef, task.title);
   return (
     <ScaleFade in={true} unmountOnExit>
       <Box
@@ -56,17 +61,18 @@ const Task = ({
           onClick={handleDeleteClick}
           color="gray.600"
         />
-        <Textarea
+        <AutoResizeTextarea
           value={task.title}
+          ref={textAreaRef}
           fontSize="lg"
           cursor="inherit"
-          p={0}
+          p={2}
           fontWeight="semibold"
-          resize="none"
           border="none"
           color="gray.800"
           onChange={handleTitleChange}
-          _focus={{ outline: "none" }}
+          _focus={{ outline: "none", boxShadow: "none" }}
+          _hover={{ border: "none" }}
         />
       </Box>
     </ScaleFade>
