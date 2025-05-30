@@ -4,6 +4,7 @@ import Column from "./components/Column.tsx";
 import { ColumnType } from "./utils/enums.ts";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import Footer from "./components/Footer.tsx";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           </SimpleGrid>
         </DndProvider>
       </Container>
+      <Footer />
     </div>
   );
 };
