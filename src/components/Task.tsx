@@ -5,6 +5,7 @@ import { LuDelete } from "react-icons/lu";
 import AutoResizeTextarea from "./AutoResizeTextArea";
 import { useRef } from "react";
 import { useAutoSizeTextArea } from "../hooks/useAutoResizeTextArea";
+import { useTaskDragAndDrop } from "../hooks/useTaskDragAndDrop";
 
 type TaskProps = {
   index: number;
@@ -19,6 +20,10 @@ const Task = ({
   onUpdate: handleUpdate,
   onDelete: handleDelete,
 }: TaskProps) => {
+  const { ref, isDragging } = useTaskDragAndDrop<HTMLDivElement>({
+    task,
+    index,
+  });
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newTitle = e.target.value;
     handleUpdate(task.id, { ...task, title: newTitle });
@@ -31,6 +36,7 @@ const Task = ({
   return (
     <ScaleFade in={true} unmountOnExit>
       <Box
+        ref={ref}
         as="div"
         position="relative"
         rounded="lg"
@@ -46,6 +52,8 @@ const Task = ({
         _hover={{
           "& .delete-btn": { opacity: 1 },
         }}
+        opacity={isDragging ? 0.5 : 1}
+        transition="opacity 0.2s ease-in-out"
       >
         <IconButton
           position="absolute"
