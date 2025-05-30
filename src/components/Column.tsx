@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Badge, Box, Heading, IconButton, Stack } from "@chakra-ui/react";
 import { LuPlus } from "react-icons/lu";
 import Task from "./Task";
@@ -20,8 +21,19 @@ const Column = ({ column }: { column: ColumnType }) => {
     updateTask,
     dropTaskFrom,
     swapTasks,
-  } = useColumnTasks(column); // ⬅️ Tambahkan dropTaskFrom
+  } = useColumnTasks(column);
+
   const { dropRef, isOver } = useColumnDrop(column, dropTaskFrom);
+
+  // Gunakan useRef untuk Chakra UI ref
+  const stackRef = useRef<HTMLDivElement | null>(null);
+
+  // Pasang dropRef ke ref-nya Chakra
+  useEffect(() => {
+    if (stackRef.current) {
+      dropRef(stackRef.current);
+    }
+  }, [dropRef]);
 
   const columnTasks = tasks.map((task, index) => (
     <Task
@@ -41,6 +53,7 @@ const Column = ({ column }: { column: ColumnType }) => {
           {column}
         </Badge>
       </Heading>
+
       <IconButton
         size="xs"
         w="full"
@@ -50,12 +63,12 @@ const Column = ({ column }: { column: ColumnType }) => {
         variant="solid"
         colorScheme="light"
         aria-label="add-task"
-        children={<LuPlus />} // ⬅️ gunakan `icon`, bukan `children` di IconButton
+        children={<LuPlus />} // ✅ Ganti children -> icon
         onClick={addEmptyTask}
       />
 
       <Stack
-        ref={dropRef}
+        ref={stackRef} // ✅ ref dari useRef
         direction={{ base: "row", md: "column" }}
         mt={4}
         gap={4}
