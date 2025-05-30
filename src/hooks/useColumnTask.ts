@@ -18,8 +18,8 @@ function useColumnTasks(column: ColumnType) {
     setTasks((allTasks) => {
       const columnTasks = allTasks[column];
 
-      if (columnTasks.length > MAX_TASK_PER_COLUMN) {
-        debug("Too many task!");
+      if (columnTasks.length >= MAX_TASK_PER_COLUMN) {
+        debug("Too many tasks!");
         return allTasks;
       }
 
@@ -53,7 +53,7 @@ function useColumnTasks(column: ColumnType) {
 
   const updateTask = useCallback(
     (id: TaskModel["id"], updatedTask: Omit<Partial<TaskModel>, "id">) => {
-      debug(`Updating task ${id} with ${JSON.stringify(updateTask)}`);
+      debug(`Updating task ${id} with ${JSON.stringify(updatedTask)}`);
       setTasks((allTasks) => {
         const columnTasks = allTasks[column];
         return {
@@ -74,13 +74,12 @@ function useColumnTasks(column: ColumnType) {
         const toColumnTasks = allTasks[column];
         const movingTask = fromColumnTasks.find((task) => task.id === id);
 
-        console.log(`Moving task ${movingTask?.id} from ${from} to ${column}`);
+        debug(`Moving task ${movingTask?.id} from ${from} to ${column}`);
 
         if (!movingTask) {
           return allTasks;
         }
 
-        // remove the task from the original column and copy it within the destination column
         return {
           ...allTasks,
           [from]: fromColumnTasks.filter((task) => task.id !== id),

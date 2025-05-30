@@ -3,6 +3,7 @@ import { LuPlus } from "react-icons/lu";
 import Task from "./Task";
 import useColumnTasks from "../hooks/useColumnTask";
 import { ColumnType } from "../utils/enums";
+import useColumnDrop from "../hooks/useColumnDrop";
 
 const ColumnColorScheme: Record<ColumnType, string> = {
   Todo: "blue",
@@ -12,8 +13,9 @@ const ColumnColorScheme: Record<ColumnType, string> = {
 };
 
 const Column = ({ column }: { column: ColumnType }) => {
-  const { tasks, addEmptyTask, deleteTask, updateTask } =
-    useColumnTasks(column);
+  const { tasks, addEmptyTask, deleteTask, updateTask, dropTaskFrom } =
+    useColumnTasks(column); // ⬅️ Tambahkan dropTaskFrom
+  const { dropRef, isOver } = useColumnDrop(column, dropTaskFrom);
 
   const columnTasks = tasks.map((task, index) => (
     <Task
@@ -41,15 +43,17 @@ const Column = ({ column }: { column: ColumnType }) => {
         variant="solid"
         colorScheme="light"
         aria-label="add-task"
-        children={<LuPlus />}
+        children={<LuPlus />} // ⬅️ gunakan `icon`, bukan `children` di IconButton
         onClick={addEmptyTask}
       />
 
       <Stack
+        ref={dropRef}
         direction={{ base: "row", md: "column" }}
         mt={4}
         gap={4}
         rounded="lg"
+        opacity={isOver ? 0.85 : 1}
         overflow="auto"
       >
         {columnTasks.length > 0 ? (
